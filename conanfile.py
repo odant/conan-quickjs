@@ -34,15 +34,22 @@ class ConanPackage(ConanFile):
         del self.settings.compiler.libcxx
 
 
+    def source(self):
+        with tools.chdir("src/test262"):
+            tools.patch(patch_file="../tests/test262.patch", strip=1, fuzz=True)
+
+
     def build(self):
         with tools.chdir("src"):
             self.run("make -j %s" % tools.cpu_count())
             if self.options.with_unit_tests:
-                self.run("make test")
+                bash_path = tools.which("bash")
+                self.run("make SHELL=%s test test2" % bash_path)
 
 
     def package(self):
         self.copy("quickjs.h", dst="include", src="src")
+        self.copy("libquickjs.a", dst="lib", src="src")
 
 
     def package_id(self):
