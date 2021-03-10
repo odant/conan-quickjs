@@ -50,6 +50,7 @@ class ConanPackage(ConanFile):
     def package(self):
         self.copy("quickjs.h", dst="include", src="src")
         self.copy("libquickjs.a", dst="lib", src="src")
+        self.copy("qjs", dst="bin", src="src")
 
 
     def package_id(self):
